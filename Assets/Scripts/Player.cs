@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
 {
     // constants
     const string ANIMATOR_PARAM_RUNNING = "Running";
+    const string ANIMATOR_PARAM_CLIMBING = "Climbing";
 
     // config
     [SerializeField] float runSpeed = 5f;
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
         HandleRunInput();
         HandleJumpInput();
         FlipSprite();
+        HandleClimbInput();
     }
 
     private void HandleRunInput()
@@ -57,10 +59,24 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void HandleClimbInput()
+    {
+        float controlThrow = CrossPlatformInputManager.GetAxis("Vertical"); // -1 to +1
+        bool isClimbing = false;
+        if (myCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        {
+            
+            Vector2 playerVelocity = new Vector2(myRigidBody.velocity.x, controlThrow * runSpeed);
+            myRigidBody.velocity = playerVelocity;
+
+            isClimbing = (Mathf.Abs(controlThrow) > Mathf.Epsilon);
+        }
+        myAnimator.SetBool(ANIMATOR_PARAM_CLIMBING, isClimbing);
+    }
+
     private void FlipSprite()
     {
-        bool playerHasHorizontalSpeed = Mathf.Abs(myRigidBody.velocity.x) > Mathf.Epsilon;
-        if (playerHasHorizontalSpeed)
+        if (isRunning())
         {
             if (isRunning())
             {
