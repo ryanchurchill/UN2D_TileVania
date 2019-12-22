@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     // config
     [SerializeField] float runSpeed = 5f;
     [SerializeField] float jumpSpeed = 5f;
+    float standardGravityScale;
 
     // state
     bool isAlive = true;
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour
         myRigidBody = GetComponent<Rigidbody2D>();
         myCollider = GetComponent<Collider2D>();
         myAnimator = GetComponent<Animator>();
+
+        standardGravityScale = myRigidBody.gravityScale;
     }
 
     // Update is called once per frame
@@ -70,8 +73,14 @@ public class Player : MonoBehaviour
             myRigidBody.velocity = playerVelocity;
 
             isClimbing = (Mathf.Abs(controlThrow) > Mathf.Epsilon);
+            myRigidBody.gravityScale = 0;
+        }
+        else
+        {
+            myRigidBody.gravityScale = standardGravityScale;
         }
         myAnimator.SetBool(ANIMATOR_PARAM_CLIMBING, isClimbing);
+        
     }
 
     private void FlipSprite()
