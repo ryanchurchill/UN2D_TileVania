@@ -19,14 +19,16 @@ public class Player : MonoBehaviour
 
     // cached component references
     Rigidbody2D myRigidBody;
-    Collider2D myCollider;
+    CapsuleCollider2D myBodyCollider;
+    BoxCollider2D myFeetCollider;
     Animator myAnimator;
 
     // Start is called before the first frame update
     void Start()
     {
         myRigidBody = GetComponent<Rigidbody2D>();
-        myCollider = GetComponent<Collider2D>();
+        myBodyCollider = GetComponent<CapsuleCollider2D>();
+        myFeetCollider = GetComponent<BoxCollider2D>();
         myAnimator = GetComponent<Animator>();
 
         standardGravityScale = myRigidBody.gravityScale;
@@ -54,7 +56,7 @@ public class Player : MonoBehaviour
     {
         if (CrossPlatformInputManager.GetButtonDown("Jump"))
         {
-            if (myCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+            if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
             {
                 Vector2 jumpVelocityToAdd = new Vector2(0, jumpSpeed);
                 myRigidBody.velocity += jumpVelocityToAdd;
@@ -66,7 +68,7 @@ public class Player : MonoBehaviour
     {
         float controlThrow = CrossPlatformInputManager.GetAxis("Vertical"); // -1 to +1
         bool isClimbing = false;
-        if (myCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        if (myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
         {
             
             Vector2 playerVelocity = new Vector2(myRigidBody.velocity.x, controlThrow * runSpeed);
