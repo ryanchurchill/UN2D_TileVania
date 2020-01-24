@@ -107,7 +107,7 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isAlive && myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy")))
+        if (isAlive && myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemy", "Hazard")))
         {
             Die();
         }

@@ -33,6 +33,7 @@ public class EnemyMovement : MonoBehaviour
         transform.localScale = new Vector2(Mathf.Sign(myRigidBody.velocity.x), transform.localScale.y);
     }
 
+    // TODO: periscope approach will make it turn around when it hits gaps too
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (myWallDetector.IsTouchingLayers(LayerMask.GetMask("Ground")))
